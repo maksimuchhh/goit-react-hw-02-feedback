@@ -3,6 +3,7 @@ import Statistics from "./components/Statistics";
 import FeedbackOptions from "./components/FeedbackOptions";
 import Section from "./components/Section";
 import Notification from "./components/Notification";
+import styles from "./App.module.css";
 export class App extends Component {
   state = {
     good: 0,
@@ -18,29 +19,33 @@ export class App extends Component {
       };
     });
   };
+  mathPercentage = () => {
+    return Math.floor(
+      (this.state.good * 100) /
+        (this.state.good + this.state.neutral + this.state.bad)
+    );
+  };
   render() {
+    const total = this.state.good + this.state.neutral + this.state.bad;
     return (
-      <>
+      <div className={styles.container}>
         <Section title="Please leave feedback">
           <FeedbackOptions feedbackAction={this.feedbackAction} />
         </Section>
         <Section title="Statistics">
-          {this.state.good + this.state.neutral + this.state.bad !== 0 ? (
+          {total !== 0 ? (
             <Statistics
               good={this.state.good}
               neutral={this.state.neutral}
               bad={this.state.bad}
-              total={this.state.good + this.state.neutral + this.state.bad}
-              percentage={Math.floor(
-                (this.state.good * 100) /
-                  (this.state.good + this.state.neutral + this.state.bad)
-              )}
+              total={total}
+              percentage={this.mathPercentage()}
             />
           ) : (
             <Notification message="No feedback given" />
           )}
         </Section>
-      </>
+      </div>
     );
   }
 }
